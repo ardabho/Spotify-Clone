@@ -17,7 +17,7 @@ final class AuthManager {
         static let clientID = ""
         static let clientSecret = ""
         static let tokenAPIURL = "https://accounts.spotify.com/api/token"
-        static let redirectURI = ""
+        static let redirectURI = "https://github.com/ardabho"
         static let scopes = "user-read-private%20playlist-modify-public%20playlist-read-private%20playlist-modify-private%20user-follow-read%20user-library-modify%20user-library-read%20user-read-email"
     }
     
@@ -130,13 +130,13 @@ final class AuthManager {
         }
     }
     
-    public func refreshIfNeeded(completion: @escaping (Bool) -> Void) {
+    public func refreshIfNeeded(completion: ((Bool) -> Void)?) {
         guard !refreshingToken else {
             return
         }
         
         guard shouldRefreshToken else {
-            completion(true)
+            completion?(true)
             return
         }
         
@@ -172,7 +172,7 @@ final class AuthManager {
         
         guard let base64String = data?.base64EncodedString() else {
             print("Something went wrong while converting to base64 inside exchangeCodeForToken method")
-            completion(false)
+            completion?(false)
             return
         }
         
@@ -184,7 +184,7 @@ final class AuthManager {
         URLSession.shared.dataTask(with: request) { [weak self] data, _, error in
             self?.refreshingToken = false
             guard let data, error == nil else {
-                completion(false)
+                completion?(false)
                 return
             }
             
@@ -193,11 +193,11 @@ final class AuthManager {
                 self?.onRefreshBlocks.forEach { $0(result.access_token) }
                 self?.onRefreshBlocks.removeAll()
                 self?.cacheToken(from: result)
-                completion(true)
+                completion?(true)
             }
             catch {
                 print(error.localizedDescription)
-                completion(false)
+                completion?(false)
             }
             
         }.resume()
