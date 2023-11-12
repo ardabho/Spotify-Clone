@@ -14,6 +14,7 @@ Spotify clone app. I made this to get better at ios development :)
 <img src="https://github.com/ardabho/Spotify-Clone/assets/83502600/345bbb84-f1dd-4ee0-8344-3759df99b11a" width="200" height="400">
 <img src="https://github.com/ardabho/Spotify-Clone/assets/83502600/d314435e-0c95-4b45-8827-6c6a29174beb" width="200" height="400">
 <img src="https://github.com/ardabho/Spotify-Clone/assets/83502600/4b93a36d-2471-46ab-86f2-0a115bb189a2" width="200" height="400">
+<img src="https://github.com/ardabho/Spotify-Clone/assets/83502600/c5841201-026e-4714-925e-286c8a4e142e" width="200" height="400">
 <img src="https://github.com/ardabho/Spotify-Clone/assets/83502600/73f034d9-31f4-465d-ab74-db8dd00d0296" width="200" height="400">
 <img src="https://github.com/ardabho/Spotify-Clone/assets/83502600/1cce578e-2adf-41c7-b86a-7c1c9e6f52ee" width="200" height="400">
 <img src="https://github.com/ardabho/Spotify-Clone/assets/83502600/598544b6-1c6e-4faf-b0a1-17821e0adc82" width="200" height="400">
