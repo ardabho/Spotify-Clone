@@ -134,11 +134,19 @@ final class APICaller {
         performRequest(with: url, method: .GET, responseObjectType: AlbumResponse.self, completion: completion)
     }
     
+    //MARK: Playlist API
+    
     ///Get a single Playlist
     public func getPlaylist(id: String, completion: @escaping(Result<PlaylistResponse, Error>) -> Void) {
         let url = URL(string: "\(Constants.baseAPIURL)/playlists/\(id)")
 
         performRequest(with: url, method: .GET, responseObjectType: PlaylistResponse.self, completion: completion)
+    }
+    
+    ///Get the current logged in users playlists
+    public func getCurrentUserPlaylists(completion: @escaping (Result<UserPlaylistsResponse, Error>) -> Void) {
+        let url = URL(string: "\(Constants.baseAPIURL)/me/playlists")
+        performRequest(with: url, method: .GET, responseObjectType: UserPlaylistsResponse.self, completion: completion)
     }
     
     ///Get recommended tracks
@@ -185,8 +193,15 @@ final class APICaller {
         performRequest(with: url, method: .GET, responseObjectType: CategoryPlaylistsResponse.self, completion: completion)
     }
     
+    ///search
     public func search(with query: String, completion: @escaping(Result<SearchResultsResponse, Error>) -> Void) {
         let url = URL(string: Constants.baseAPIURL + "/search?type=album,artist,playlist,track&q=\(query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")&limit=6")
         performRequest(with: url, method: .GET, responseObjectType: SearchResultsResponse.self, completion: completion)
+    }
+    
+    ///Get Users Saved Albums
+    public func getUserAlbums(completion: @escaping(Result<UserAlbumsResponse, Error>) -> Void) {
+        let url = URL(string: Constants.baseAPIURL + "/me/albums")
+        performRequest(with: url, method: .GET, responseObjectType: UserAlbumsResponse.self, completion: completion)
     }
 }

@@ -10,6 +10,12 @@ import UIKit
 
 protocol PlayerControlsDelegate: AnyObject {
     func PlayerControlsDidTapControlButton(_ playerControlsView: PlayerControlsView, buttonType: ButtonType)
+    func playerControlsView(_ playerControlsView: PlayerControlsView, didSlideSlider value: Float)
+}
+
+struct PlayerControlsViewModel {
+    let title: String?
+    let subtitle: String?
 }
 
 enum ButtonType {
@@ -22,11 +28,12 @@ final class PlayerControlsView: UIView {
     
     weak var delegate: PlayerControlsDelegate?
     
+    private var isPlaying = true
+    
     let verticalStack: UIStackView = {
         let stackview = UIStackView()
         stackview.axis = .vertical
         stackview.distribution = .fill
-        stackview.spacing = 5
         return stackview
     }()
     
@@ -35,11 +42,10 @@ final class PlayerControlsView: UIView {
         stackview.translatesAutoresizingMaskIntoConstraints = false
         stackview.axis = .horizontal
         stackview.distribution = .fillEqually
-        stackview.spacing = 5
         return stackview
     }()
     
-    //nameLabel with lines 1 and font systemfont 22 with a weight of semibolkd
+    //nameLabel
     let nameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -102,6 +108,7 @@ final class PlayerControlsView: UIView {
         backButton.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
         pauseButton.addTarget(self, action: #selector(didTapPauseButton), for: .touchUpInside)
         forwardButton.addTarget(self, action: #selector(didTapForwardButton), for: .touchUpInside)
+        volumeSlider.addTarget(self, action: #selector(didSlideSlider), for: .valueChanged)
         
         verticalStack.addArrangedSubview(nameLabel)
         verticalStack.addArrangedSubview(subtitleLabel)
@@ -130,11 +137,34 @@ final class PlayerControlsView: UIView {
     }
     
     @objc private func didTapPauseButton() {
+        
+        pauseButton.setImage(
+            isPlaying
+            ?
+            UIImage(systemName: "play.fill",
+                    withConfiguration: UIImage.SymbolConfiguration(pointSize: 34, weight: .regular))
+            :
+                UIImage(
+                    systemName: "pause.fill",
+                    withConfiguration: UIImage.SymbolConfiguration(pointSize: 34, weight: .regular)),
+            for: .normal
+        )
+        isPlaying = !isPlaying
         delegate?.PlayerControlsDidTapControlButton(self, buttonType: .playPause)
     }
     
     @objc private func didTapForwardButton() {
         delegate?.PlayerControlsDidTapControlButton(self, buttonType: .forward)
+    }
+    
+    @objc private func didSlideSlider(_ slider: UISlider) {
+        let value = slider.value
+        delegate?.playerControlsView(self, didSlideSlider: value )
+    }
+    
+    public func configure(model: PlayerControlsViewModel){
+        nameLabel.text = model.title
+        subtitleLabel.text = model.subtitle
     }
     
     required init?(coder: NSCoder) {

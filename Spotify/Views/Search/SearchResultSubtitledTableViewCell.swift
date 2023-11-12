@@ -16,7 +16,7 @@ class SearchResultSubtitledTableViewCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 15, weight: .heavy)
-
+        label.numberOfLines = 0
         return label
     }()
     
@@ -24,7 +24,7 @@ class SearchResultSubtitledTableViewCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 13, weight: .light)
-
+        label.numberOfLines = 0
         return label
     }()
     

@@ -8,7 +8,7 @@
 import Foundation
 
 struct Playlist: Codable {
-    let collaborative: Bool
+    let collaborative: Bool?
     let description: String
     let externalUrls: [String: String]
     let id: String
@@ -19,8 +19,8 @@ struct Playlist: Codable {
     let itemPublic: String?
     let snapshotID: String
     let tracks: Tracks?
-    let type: String
-    let uri: String
+    let type: String?
+    let uri: String?
 
     enum CodingKeys: String, CodingKey {
         case collaborative, description, id, images, name, owner, tracks, type, uri

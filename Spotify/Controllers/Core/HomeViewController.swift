@@ -313,7 +313,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
         case 2:
             let track = recommendedTracks[indexPath.row]
-            PlaybackPresenter.startPlayback(from: self, track: track)
+            PlaybackPresenter.shared.startPlayback(from: self, track: track)
             
         default:
             break

@@ -6,14 +6,24 @@
 //
 
 import UIKit
+import SDWebImage
+
+protocol PlayerViewControllerDelegate: AnyObject {
+    func didTapForward()
+    func didTapPlayPause()
+    func didTapBackward()
+    func didSlideSlider(_ value: Float)
+}
 
 class PlayerViewController: UIViewController {
+    
+    weak var dataSource: PlayerDataSource?
+    weak var delegate: PlayerViewControllerDelegate?
     
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFill
-        imageView.backgroundColor = .systemBlue
+        imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
@@ -27,6 +37,7 @@ class PlayerViewController: UIViewController {
         controlsView.delegate = self
         
         configureBarButtons()
+        configure()
     }
     
     override func viewDidLayoutSubviews() {
@@ -35,8 +46,9 @@ class PlayerViewController: UIViewController {
         
         let imageViewConstraints = [
             imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            imageView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 1),
-            imageView.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor, multiplier: 2 / 3)
+            imageView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, multiplier: 1, constant: -20),
+            imageView.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor, multiplier: 2 / 3),
+            imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ]
         
         let playerControlsViewConstraints = [
@@ -62,23 +74,44 @@ class PlayerViewController: UIViewController {
     }
     
     @objc private func didTapAction() {
-        //Actions
+        guard let url = dataSource?.shareURL else {
+            return
+        }
+        
+        let vc = UIActivityViewController(
+            activityItems: [url],
+            applicationActivities: []
+        )
+        vc.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
+        present(vc, animated: true)
+    }
+    
+    private func configure() {
+        imageView.sd_setImage(with: dataSource?.imageURL)
+        controlsView.configure(model: PlayerControlsViewModel(title: dataSource?.songName, subtitle: dataSource?.subtitle))
+    }
+    
+    public func refreshUI () {
+        configure()
     }
     
 }
 
 extension PlayerViewController: PlayerControlsDelegate {
     
-    func PlayerControlsDidTapControlButton(_ playerControlsView: PlayerControlsView, buttonType: ButtonType) {
-        switch buttonType {
-        case .back:
-            print("pressed back button")
-        case .playPause:
-            print("pressed play pause button")
-        case .forward:
-            print("pressed forward button")
-        }
+    func playerControlsView(_ playerControlsView: PlayerControlsView, didSlideSlider value: Float) {
+        delegate?.didSlideSlider(value)
     }
     
     
+    func PlayerControlsDidTapControlButton(_ playerControlsView: PlayerControlsView, buttonType: ButtonType) {
+        switch buttonType {
+        case .back:
+            delegate?.didTapBackward()
+        case .playPause:
+            delegate?.didTapPlayPause()
+        case .forward:
+            delegate?.didTapForward()
+        }
+    }
 }
