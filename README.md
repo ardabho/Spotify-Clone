@@ -4,6 +4,7 @@ Spotify clone app. I made this to get better at ios development :)
 - UIkit and Swift
 - Programmatic UI, No storyboards,
 - MVVM Pattern,
+- Light/Dark mode support,
 - Spotify API,
 - SDWebImage for image loading and caching,
 - AVFoundation for playing music,
